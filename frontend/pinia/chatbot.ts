@@ -17,7 +17,7 @@ const STORE_KEY = "@chatBotStore";
 
 export const useChatBot = defineStore(STORE_KEY, {
   state: (): BotStore => ({
-    addImages: true,
+    addImages: false,
     toolsInfo: {
       createRequest:
         "Example: create a request with Gucci Bag(name), A nice bag(description)",
@@ -36,25 +36,24 @@ export const useChatBot = defineStore(STORE_KEY, {
     async solveTask(task: string): Promise<string[]> {
       const userStore = useUserStore();
       const anchor = useAnchorWallet();
-      const action: AiResponseType = await callLLMApi({
-        task,
-      }); // REAL one
-      // const action: AiResponseType = {
-      //   content: "",
-      //   tool_calls: [
-      //     {
-      //       name: "createUserAI",
-      //       args: {
-      //         username: "Good",
-      //         account_type: "buyer",
-      //       },
-      //       type: "tool_call",
-      //       id: 4,
-      //     },
-      //   ],
-      // };
-
-      userStore.anchorWallet = anchor.value;
+      // const action: AiResponseType = await callLLMApi({
+      //   task,
+      // });
+      // REAL one
+      const action: AiResponseType = {
+        content: "",
+        tool_calls: [
+          {
+            name: "createUserAI",
+            args: {
+              username: "Good",
+              account_type: "buyer",
+            },
+            type: "tool_call",
+            id: 4,
+          },
+        ],
+      };
 
       const results: string[] = [];
 
