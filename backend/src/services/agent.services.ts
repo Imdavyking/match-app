@@ -1,40 +1,41 @@
 import { HfAgent, LLMFromHub, defaultTools } from "@huggingface/agents";
 import dotenv from "dotenv";
 import type { Tool } from "@huggingface/agents/src/types";
+import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
 type Data = string | Blob | ArrayBuffer;
 const tools: Tool[] = [
-  ...defaultTools,
-  {
-    name: "createRequestAI",
-    description:
-      "Create a new request with name and description, convert arguments to JSON.",
-    examples: [
-      {
-        prompt:
-          "Create a request with name Gucci Bag and description Nice Bag .",
-        code: `const output = createRequestAI('{"name":"Gucci Bag","description":"Nice Bag"}')`,
-        tools: ["createRequestAI"],
-      },
-    ],
-    call: async (input: Promise<Data>) => {
-      const data = await input;
-      if (typeof data === "string") {
-        throw new Error("Invalid input");
-      }
-      const { name, description } = JSON.parse(data.toString());
-      return JSON.stringify({
-        name: "createRequestAI",
-        args: {
-          name,
-          description,
-        },
-        type: "tool_call",
-        id: 1,
-      });
-    },
-  },
+  defaultTools[0],
+  // {
+  //   name: "createRequestAI",
+  //   description:
+  //     "Create a new request with name and description, convert arguments to JSON.",
+  //   examples: [
+  //     {
+  //       prompt:
+  //         "Create a request with name Gucci Bag and description Nice Bag .",
+  //       code: `const output = createRequestAI('{"name":"Gucci Bag","description":"Nice Bag"}')`,
+  //       tools: ["createRequestAI"],
+  //     },
+  //   ],
+  //   call: async (input: Promise<Data>) => {
+  //     const data = await input;
+  //     if (typeof data === "string") {
+  //       throw new Error("Invalid input");
+  //     }
+  //     const { name, description } = JSON.parse(data.toString());
+  //     return JSON.stringify({
+  //       name: "createRequestAI",
+  //       args: {
+  //         name,
+  //         description,
+  //       },
+  //       type: "tool_call",
+  //       id: 1,
+  //     });
+  //   },
+  // },
   // {
   //   name: "getRequestAI",
   //   description: "Fetch a request by ID.",
@@ -181,11 +182,27 @@ const tools: Tool[] = [
   // },
 ];
 
+const api = new OpenAIApi(
+  new Configuration({ apiKey: process.env.OPENAI_API_KEY })
+);
+
+const llmOpenAI = async (prompt: string): Promise<string> => {
+  const completion = await api.createChatCompletion({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  if (completion.data.choices[0]?.message?.content) {
+    return completion.data.choices[0].message.content;
+  }
+  return "";
+};
+
 export async function runAIAgent(messages: string) {
   try {
     const agent = new HfAgent(
       process.env.HUGGINGFACE_API_KEY!,
-      LLMFromHub(process.env.HUGGINGFACE_API_KEY!),
+      llmOpenAI,
       tools
     );
 

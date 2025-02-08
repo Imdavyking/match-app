@@ -45,7 +45,7 @@
     "login-with-twitter": "^1.2.4",
     "mongoose": "^8.9.5",
     "oauth-1.0a": "^2.2.6",
-    "openai": "^4.80.1",
+    "openai": "^3.2.1",
     "simple-get": "^4.0.1",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
