@@ -1,4 +1,4 @@
-import { HfAgent, LLMFromHub, defaultTools } from "@huggingface/agents";
+import { HfAgent, LLMFromEndpoint, defaultTools } from "@huggingface/agents";
 import dotenv from "dotenv";
 import type { Tool } from "@huggingface/agents/src/types";
 import { Configuration, OpenAIApi } from "openai";

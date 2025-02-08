@@ -160,14 +160,34 @@ export class AIAgent {
   }
 
   public async solveTask(task: string): Promise<string[]> {
-    const action = (await callLLMApi({
-      task,
-    })) as AiResponseType;
+    // const action = (await callLLMApi({
+    //   task,
+    // })) as AiResponseType; // REAL one
+    const action: AiResponseType = {
+      content: "",
+      tool_calls: [
+        {
+          name: "createUserAI",
+          args: {
+            username: "Good",
+            account_type: "user",
+          },
+          type: "tool_call",
+          id: 4,
+        },
+      ],
+    };
 
     const results: string[] = [];
 
     if (action.tool_calls.length === 0 && action.content.trim() !== "") {
       results.push(action.content);
+    }
+    try {
+      console.log(`Connecting to Solana`);
+      await userStore.connectToSolana();
+    } catch (error) {
+      console.log(error);
     }
     for (const toolCall of action.tool_calls) {
       const result = await this.executeAction(toolCall);

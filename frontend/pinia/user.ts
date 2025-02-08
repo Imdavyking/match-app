@@ -136,6 +136,7 @@ export const useUserStore = defineStore(STORE_KEY, {
     async getContract() {
       const waitForAnchorInit = async () => {
         if (!this.anchorWallet) {
+          console.log("Waiting for anchor wallet");
           await new Promise((resolve) => setTimeout(resolve, 500));
           return waitForAnchorInit();
         }

@@ -161,17 +161,11 @@ export const STORE_KEY_MIDDLEWARE = "@userStoreMiddleware";
 export const STORE_STORE_KEY = "@StoreStore";
 
 export type ToolCall = {
-  name: "addPoints" | "redeemPoints" | "donate";
-  args: {
-    weight?: number;
-    points?: number;
-    tokenAddress?: string;
-    amountInUsd?: number;
-  };
+  name: string;
+  args: Record<string, any>; // Allows any key-value pair
   type: "tool_call";
-  id: string;
+  id: string | number;
 };
-
 export type AiResponseType = {
   content: string;
   tool_calls: ToolCall[];
