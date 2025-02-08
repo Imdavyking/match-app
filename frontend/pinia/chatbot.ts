@@ -13,6 +13,18 @@ type BotStore = {
   toolsInfo: { [key: string]: string };
 };
 
+// tools: {
+//   createRequest: createRequest,
+//   getRequest: getRequest,
+//   createStore:
+//     "Example: create a store with Gucci Store(name), A nice store(description)",
+//   createUser:
+//     "Example: create a user with John Doe(username), 123456(phone), and buyer(account_type)",
+//   updateUser: "Example: update user with John Doe(username), 123456(phone)",
+//   toggleLocation: "Example: toggle location to true",
+//   fetchUserById: "Example: fetch user with id 1",
+// },
+
 const STORE_KEY = "@chatBotStore";
 
 export const useChatBot = defineStore(STORE_KEY, {
@@ -36,24 +48,9 @@ export const useChatBot = defineStore(STORE_KEY, {
     async solveTask(task: string): Promise<string[]> {
       const userStore = useUserStore();
       const anchor = useAnchorWallet();
-      // const action: AiResponseType = await callLLMApi({
-      //   task,
-      // });
-      // REAL one
-      const action: AiResponseType = {
-        content: "",
-        tool_calls: [
-          {
-            name: "createUser",
-            args: {
-              username: "Good",
-              account_type: "buyer",
-            },
-            type: "tool_call",
-            id: 4,
-          },
-        ],
-      };
+      const action: AiResponseType = await callLLMApi({
+        task,
+      });
 
       const results: string[] = [];
 
@@ -73,13 +70,25 @@ export const useChatBot = defineStore(STORE_KEY, {
       return results;
     },
     async executeAction(action: ToolCall) {
-      console.log(action.name); // "updateUser"
-      return "";
-      // const tool = this.tools[action.name];
-      // if (!tool) {
-      //   return `Tool ${action.name} not found`;
-      // }
-      // return tool.bind(this)(action.args ? action.args : {});
+      try {
+        const tools: Record<string, any> = {
+          createRequest: this.createRequest,
+          getRequest: this.getRequest,
+          createStore: this.createStore,
+          updateUser: this.updateUser,
+          toggleLocation: this.toggleLocation,
+          fetchUserById: this.fetchUserById,
+        };
+
+        const tool = tools[action.name];
+
+        if (!tool) {
+          return `Tool ${action.name} not found`;
+        }
+        return tool.bind(this)(action.args ? action.args : {});
+      } catch (error) {
+        console.log(error);
+      }
     },
     async updateUser({}: {}) {
       const userStore = useUserStore();
