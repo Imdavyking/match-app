@@ -187,5 +187,5 @@ export async function runAIAgent(messages: string) {
     tools as any
   );
 
-  return await agent.evaluateCode(messages);
+  return await agent.run(messages);
 }
