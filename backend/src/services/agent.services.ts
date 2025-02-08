@@ -211,10 +211,12 @@ export async function runAIAgent(messages: string) {
 
     const results = [];
     for (const res of response) {
-      results.push(await res.data);
+      try {
+        results.push(JSON.parse((await res.data) as string));
+      } catch (error) {}
     }
 
-    return results;
+    return { content: "", tool_calls: results };
   } catch (error) {
     console.error(error);
     return {};
