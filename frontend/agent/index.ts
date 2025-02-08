@@ -7,6 +7,8 @@ import { useStoreStore } from "@/pinia/store";
 import { AiResponseType, ToolCall, AccountType } from "../types";
 import { generateSlug, RandomWordOptions } from "random-word-slugs";
 import { createPinia, setActivePinia } from "pinia";
+import { AnchorWallet, useAnchorWallet, useWallet } from "solana-wallets-vue";
+const anchor = useAnchorWallet();
 
 const pinia = createPinia();
 setActivePinia(pinia);
@@ -170,7 +172,7 @@ export class AIAgent {
           name: "createUserAI",
           args: {
             username: "Good",
-            account_type: "user",
+            account_type: "buyer",
           },
           type: "tool_call",
           id: 4,
@@ -178,13 +180,14 @@ export class AIAgent {
       ],
     };
 
+    userStore.anchorWallet = anchor.value;
+
     const results: string[] = [];
 
     if (action.tool_calls.length === 0 && action.content.trim() !== "") {
       results.push(action.content);
     }
     try {
-      console.log(`Connecting to Solana`);
       await userStore.connectToSolana();
     } catch (error) {
       console.log(error);

@@ -34,6 +34,7 @@ import { AnchorProvider, BN, Idl, Program } from "@project-serum/anchor";
 import { marketAbi } from "@/blockchain/abi";
 import { programID } from "@/utils/constants";
 import { get } from "http";
+import { profile } from "console";
 
 type UserStore = {
   accountId: string | null;
@@ -282,7 +283,7 @@ export const useUserStore = defineStore(STORE_KEY, {
 
     async createUser({
       username,
-      phone,
+      phone = "",
       lat,
       long,
       account_type,
