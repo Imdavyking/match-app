@@ -136,9 +136,8 @@ const handleSend = async () => {
     userInput.value = "";
     try {
       isProcessing.value = true;
-      await chatBotStore.solveTask(data);
-      // const response = await agent.solveTask(data);
-      // respondToUser(response);
+      const response = await chatBotStore.solveTask(data);
+      respondToUser(response);
     } catch (error: any) {
       toast.error(`Failed to perform action ${error.message}`);
     } finally {

@@ -114,6 +114,7 @@ export const useChatBot = defineStore(STORE_KEY, {
       const requestStore = useRequestsStore();
       const userStore = useUserStore();
       try {
+        this.addImages = true;
         const images: string[] = [];
         await requestStore.createRequest({
           name,
