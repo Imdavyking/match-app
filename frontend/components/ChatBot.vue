@@ -1,22 +1,27 @@
 <template>
   <div>
-    <div class="fixed bottom-24 right-0 mb-4 mr-10">
+    <div class="tw-fixed tw-bottom-24 tw-right-0 tw-mb-4 tw-mr-10">
       <button
         @click="toggleChatbox"
-        class="bg-[#28334e] text-white py-2 px-4 rounded-full hover:bg-[#28334e] transition duration-300 flex items-center h-12 cursor-pointer"
+        class="tw-bg-[#28334e] tw-text-white tw-py-2 tw-px-4 tw-rounded-full hover:tw-bg-[#28334e] tw-transition tw-duration-300 tw-flex tw-items-center tw-h-12 tw-cursor-pointer"
       >
         Perform action with AI Agent
       </button>
     </div>
 
-    <div v-if="isChatboxOpen" class="fixed bottom-24 right-4 w-96 z-50">
-      <div class="bg-white shadow-md rounded-lg max-w-lg w-full relative">
+    <div
+      v-if="isChatboxOpen"
+      class="tw-fixed tw-bottom-24 tw-right-4 tw-w-96 tw-z-50"
+    >
+      <div
+        class="tw-bg-white tw-shadow-md tw-rounded-lg tw-max-w-lg tw-w-full tw-relative"
+      >
         <div
           v-if="messages.length === 0"
-          class="bg-gray-100 rounded-lg p-4 absolute top-20 left-1/2 transform -translate-x-1/2 w-10/12"
+          class="tw-bg-gray-100 tw-rounded-lg tw-p-4 tw-absolute tw-top-20 tw-left-1/2 tw-transform -tw-translate-x-1/2 tw-w-10/12 tw-max-h-40 tw-overflow-y-auto"
         >
-          <h3 class="text-lg font-semibold text-gray-700">Commands</h3>
-          <ul class="list-disc ml-5 mt-2 text-gray-600">
+          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-700">Commands</h3>
+          <ul class="tw-list-disc tw-ml-5 tw-mt-2 tw-text-gray-600">
             <li v-for="(desc, key) in agent.toolsInfo" :key="key">
               <strong>{{ key }}:</strong> {{ desc }}.
             </li>
@@ -24,16 +29,16 @@
         </div>
 
         <div
-          class="p-4 border-b bg-[#28334e] text-white rounded-t-lg flex justify-between items-center"
+          class="tw-p-4 tw-border-b tw-bg-[#28334e] tw-text-white tw-rounded-t-lg tw-flex tw-justify-between tw-items-center"
         >
-          <p class="text-lg font-semibold">AI Agent</p>
+          <p class="tw-text-lg tw-font-semibold">AI Agent</p>
           <button
             @click="toggleChatbox"
-            class="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
+            class="tw-text-gray-300 hover:tw-text-gray-400 focus:tw-outline-none focus:tw-text-gray-400"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
+              class="tw-w-6 tw-h-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -48,39 +53,42 @@
           </button>
         </div>
 
-        <div class="p-4 h-80 overflow-y-auto">
+        <div class="tw-p-4 tw-h-80 tw-overflow-y-auto">
           <div
             v-for="(message, index) in messages"
             :key="index"
-            :class="{ 'text-right': message.sender === 'user' }"
-            class="mb-2"
+            :class="{ 'tw-text-right': message.sender === 'user' }"
+            class="tw-mb-2"
           >
             <p
               :class="
                 message.sender === 'user'
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700'
+                  ? 'tw-bg-blue-500 tw-text-white'
+                  : 'tw-bg-gray-200 tw-text-gray-700'
               "
-              class="rounded-lg py-2 px-4 inline-block"
+              class="tw-rounded-lg tw-py-2 tw-px-4 tw-inline-block"
             >
               {{ message.text }}
             </p>
           </div>
         </div>
 
-        <div class="p-4 border-t flex">
+        <div class="tw-p-4 tw-border-t tw-flex">
           <input
             v-model="userInput"
             @keypress.enter="handleSend"
             type="text"
             placeholder="Type a message"
-            class="w-full px-3 py-2 border text-black rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#28334e]"
+            class="tw-w-full tw-px-3 tw-py-2 tw-border tw-text-black tw-rounded-l-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#28334e]"
           />
           <button
             @click="handleSend"
-            class="bg-[#28334e] text-white px-4 py-2 rounded-r-md hover:bg-[#28334e] transition duration-300"
+            class="tw-bg-[#28334e] tw-text-white tw-px-4 tw-py-2 tw-rounded-r-md hover:tw-bg-[#28334e] tw-transition tw-duration-300"
           >
-            <div v-if="isProcessing" class="w-5 h-5 animate-spin">loading</div>
+            <FaSpinner
+              v-if="isProcessing"
+              class="tw-w-5 tw-h-5 tw-animate-spin"
+            />
             <span v-else>Send</span>
           </button>
         </div>
