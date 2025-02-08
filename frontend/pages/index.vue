@@ -40,13 +40,7 @@
               </p>
               <!-- TODO: remove later -->
               <button
-                @click="
-                  async () => {
-                    const agent = new AIAgent();
-                    await agent.solveTask(" ")
-                    console.log(agent);
-                  }
-                "
+                @click="callAgent"
                 class="tw-inline-block tw-bg-black tw-text-white tw-p-4 tw-py-2.5 tw-mt-4 tw-rounded-lg mr-4"
               >
                 <span>TEST AGENT</span>
@@ -262,6 +256,12 @@ const disconnect = async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const callAgent = async () => {
+  const agent = new AIAgent();
+  await agent.solveTask(" ");
+  console.log(agent);
 };
 const handleSellerBtnClick = async () => {
   if (isSeller.value) {
