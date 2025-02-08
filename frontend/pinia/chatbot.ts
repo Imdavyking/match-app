@@ -123,7 +123,7 @@ export const useChatBot = defineStore(STORE_KEY, {
       } catch (error) {
         return `Failed to create request: ${error}`;
       } finally {
-        // this.addImages = false;
+        this.addImages = false;
       }
     },
     async getRequest({ id }: { id: string }) {
