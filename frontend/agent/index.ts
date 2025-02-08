@@ -1,13 +1,12 @@
 /** @format */
 
-import { callLLMApi } from "../services/llm.services";
 import { useRequestsStore } from "@/pinia/request";
 import { useUserStore } from "@/pinia/user";
 import { useStoreStore } from "@/pinia/store";
 import { AiResponseType, ToolCall, AccountType } from "../types";
 import { generateSlug, RandomWordOptions } from "random-word-slugs";
 import { createPinia, setActivePinia } from "pinia";
-import { AnchorWallet, useAnchorWallet, useWallet } from "solana-wallets-vue";
+import { useAnchorWallet } from "solana-wallets-vue";
 const anchor = useAnchorWallet();
 
 const pinia = createPinia();
