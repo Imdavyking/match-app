@@ -12,11 +12,10 @@ use anchor_spl::
 ;
 use pyth_solana_receiver_sdk::price_update::{get_feed_id_from_hex, PriceUpdateV2};
 use solana_program::pubkey::Pubkey;
-declare_id!("gSh52u5Nt39rb8CSHQhUhF1cSdFsL9JebSoPZmazFrZ");
+declare_id!("Gde2V9pUafhQSDMYNMhtGTjTDDWBvD9DZH251Hq26wgL");
 use crate::{constants::*, events::*, states::*, errors::*};
 use solana_program::pubkey;
 use std::mem::size_of;
-const PORTAL_PYUSD_TOKEN_ACCOUNT_PUBKEY: Pubkey = pubkey!("GxaRbc7Y7MTuti8uQAU1GAJpi8DUh5jQAHrVuG9mXJJV");
 const PYTH_USDC_FEED: Pubkey = pubkey!("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE");
 pub const MAXIMUM_AGE: u64 = 60;
 const SOL_USD_PRICE_FEED:&str = "0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d";
@@ -235,7 +234,35 @@ pub mod marketplace {
 
     pub fn mark_request_as_completed(ctx: Context<MarkAsCompleteRequest>) -> Result<()> {
         let request = &mut ctx.accounts.request;
+        let mint = &ctx.accounts.mint;
+        let token_program = &ctx.accounts.token_program;
+        let to_ata = &ctx.accounts.to_ata;
         let authority = &ctx.accounts.authority;
+        let request_payment_info = &mut ctx.accounts.request_payment_info;
+
+        let (pda, _bump) = Pubkey::find_program_address(
+            &[REQUEST_PAYMENT_TAG],
+            ctx.program_id
+        );
+
+        let bump_seed = ctx.bumps.request_payment_counter;
+        let signer_seeds : &[&[&[u8]]] = &[&[REQUEST_PAYMENT_TAG, &[bump_seed]]];
+
+
+        let accounts = TransferChecked {
+            from: ctx.accounts.token_ata.to_account_info(),
+            to: to_ata.to_account_info(),
+            authority: ctx.accounts.request_payment_counter.to_account_info(),
+            mint: mint.to_account_info(),
+        };
+
+        let ctx = CpiContext::new_with_signer(
+            token_program.to_account_info(),
+            accounts,
+            signer_seeds
+        );
+
+        
     
         if request.authority != authority.key() {
             return err!(MarketplaceError::InvalidUser);
@@ -251,6 +278,10 @@ pub mod marketplace {
     
         request.lifecycle = RequestLifecycle::Completed;
         request.updated_at = Clock::get().unwrap().unix_timestamp as u64;
+
+        let pyusd_amount = request_payment_info.amount;
+
+        transfer_checked(ctx, pyusd_amount, mint.decimals)?;
     
         Ok(())
     }
@@ -705,11 +736,41 @@ pub struct MarkAsCompleteRequest<'info> {
         bump,
     )]
     pub request: Box<Account<'info, Request>>,
+
+    #[account(mut, 
+    seeds = [REQUEST_PAYMENT_TAG, authority.key().as_ref(),&request_payment_counter.current.to_le_bytes()],
+    bump,)]
+    pub request_payment_info: Box<Account<'info, RequestPaymentTransaction>>,
+
+    #[account(
+        mut,
+        seeds = [REQUEST_PAYMENT_COUNTER],
+        bump,
+    )]
+    pub request_payment_counter: Box<Account<'info, Counter>>,
+
+    pub mint: InterfaceAccount<'info, Mint>,
     
     #[account(mut)]
     pub authority: Signer<'info>,
     
     pub system_program: Program<'info, System>,
+
+    #[account(mut)]
+    pub to_ata: InterfaceAccount<'info, TokenAccount>,
+
+    // #[account(
+    //     init_if_needed,
+    //     payer = authority,
+    //     associated_token::mint = mint,
+    //     associated_token::authority = request_payment_counter,
+    // )]
+    #[account(mut)]
+    pub token_ata: InterfaceAccount<'info, TokenAccount>,
+
+    pub associated_token_program: Program<'info, anchor_spl::associated_token::AssociatedToken>,
+    
+    pub token_program: Interface<'info, TokenInterface>,
 }
 #[derive(Accounts)]
 pub struct PayForRequest<'info> {
@@ -784,16 +845,14 @@ pub struct PayForRequestToken<'info> {
     #[account(mut)]
     pub from_ata: InterfaceAccount<'info, TokenAccount>,
 
-    #[account(mut,address = PORTAL_PYUSD_TOKEN_ACCOUNT_PUBKEY)]
+    // #[account(
+    //     init_if_needed,
+    //     payer = authority,
+    //     associated_token::mint = mint,
+    //     associated_token::authority = request_payment_counter,
+    // )]
+    #[account(mut)]
     pub to_ata: InterfaceAccount<'info, TokenAccount>,
-
-    #[account(
-        init_if_needed,
-        payer = authority,
-        associated_token::mint = mint,
-        associated_token::authority = request_payment_counter,
-    )]
-    pub to_ata2: InterfaceAccount<'info, TokenAccount>,
 
     pub associated_token_program: Program<'info, anchor_spl::associated_token::AssociatedToken>,
     

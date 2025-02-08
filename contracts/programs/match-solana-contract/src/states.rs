@@ -77,6 +77,11 @@ pub struct Counter {
     pub current: u64,
 }
 
+#[account]
+pub struct CustomPda {
+    x: u64,
+    y: u64
+}
 
 #[account]
 pub struct PyusdtAccount {
