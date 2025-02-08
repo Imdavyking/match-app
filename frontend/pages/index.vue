@@ -38,14 +38,6 @@
                 Send notifications to store owners in markets around you from
                 the comfort of your home
               </p>
-              <!-- TODO: remove later -->
-              <button
-                @click="callAgent"
-                class="tw-inline-block tw-bg-black tw-text-white tw-p-4 tw-py-2.5 tw-mt-4 tw-rounded-lg mr-4"
-              >
-                <span>TEST AGENT</span>
-                <v-icon>mdi-arrow-right</v-icon>
-              </button>
 
               <!-- should be a connect function -->
               <button
@@ -189,7 +181,6 @@ import ChatBot from "@/components/ChatBot.vue";
 
 import { User, AccountType, STORE_KEY_MIDDLEWARE, STORE_KEY } from "@/types";
 import { useUserStore } from "@/pinia/user";
-import { AIAgent } from "~/agent";
 
 const env = useRuntimeConfig().public;
 useHead({
@@ -259,14 +250,6 @@ const disconnect = async () => {
   } catch (error) {
     console.log(error);
   }
-};
-
-const callAgent = async () => {
-  const agent = new AIAgent();
-  const response = await agent.solveTask(
-    "create a seller user with name Good and phone 0813384883"
-  );
-  console.log(response);
 };
 const handleSellerBtnClick = async () => {
   if (isSeller.value) {
