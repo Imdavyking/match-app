@@ -20,9 +20,7 @@ const tools: Tool[] = [
     ],
     call: async (input: Promise<Data>) => {
       const data = await input;
-      if (typeof data === "string") {
-        throw new Error("Invalid input");
-      }
+
       const { name, description } = JSON.parse(data.toString());
       return JSON.stringify({
         name: "createRequestAI",
@@ -208,7 +206,11 @@ export async function runAIAgent(messages: string) {
       tools
     );
 
-    return await agent.run(messages);
+    const response = await agent.run(messages);
+
+    console.log(response);
+
+    return response;
   } catch (error) {
     console.error(error);
     return {};
