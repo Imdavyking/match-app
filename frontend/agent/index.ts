@@ -7,6 +7,7 @@ import { AiResponseType, ToolCall, AccountType } from "../types";
 import { generateSlug, RandomWordOptions } from "random-word-slugs";
 import { createPinia, setActivePinia } from "pinia";
 import { useAnchorWallet } from "solana-wallets-vue";
+import { callLLMApi } from "../services/llm.services";
 const anchor = useAnchorWallet();
 
 const pinia = createPinia();
@@ -29,6 +30,14 @@ export class AIAgent {
 
   constructor() {
     this.tools = {
+      transferSol: async ({ amount, to }: { amount: number; to: string }) => {
+        try {
+          await userStore.transferSol({ amount, to });
+          return `Transferred ${amount} SOL to ${to}`;
+        } catch (error) {
+          return `Failed to transfer ${amount} SOL to ${to}`;
+        }
+      },
       createUserAI: async ({
         username,
         account_type,
@@ -161,23 +170,23 @@ export class AIAgent {
   }
 
   public async solveTask(task: string): Promise<string[]> {
-    // const action: AiResponseType = await callLLMApi({
-    //   task,
-    // }); // REAL one
-    const action: AiResponseType = {
-      content: "",
-      tool_calls: [
-        {
-          name: "createUserAI",
-          args: {
-            username: "Good",
-            account_type: "buyer",
-          },
-          type: "tool_call",
-          id: 4,
-        },
-      ],
-    };
+    const action: AiResponseType = await callLLMApi({
+      task,
+    }); // REAL one
+    // const action: AiResponseType = {
+    //   content: "",
+    //   tool_calls: [
+    //     {
+    //       name: "createUserAI",
+    //       args: {
+    //         username: "Good",
+    //         account_type: "buyer",
+    //       },
+    //       type: "tool_call",
+    //       id: 4,
+    //     },
+    //   ],
+    // };
 
     userStore.anchorWallet = anchor.value;
 

@@ -12,9 +12,6 @@ import {
   Store,
 } from "@/types";
 import {
-  appMetaData,
-  chainInfo,
-  DEBUG,
   LOCATION_DECIMALS,
   REQUEST_PAYMENT_COUNTER_PUBKEY,
   USER_COUNTER_PUBKEY,
@@ -23,18 +20,10 @@ import {
 import { useStoreStore } from "./store";
 import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey";
 import { utf8 } from "@project-serum/anchor/dist/cjs/utils/bytes";
-
-import {
-  clusterApiUrl,
-  Connection,
-  PublicKey,
-  SystemProgram,
-} from "@solana/web3.js";
+import { Connection, PublicKey, SystemProgram } from "@solana/web3.js";
 import { AnchorProvider, BN, Idl, Program } from "@project-serum/anchor";
 import { marketAbi } from "@/blockchain/abi";
 import { programID } from "@/utils/constants";
-import { get } from "http";
-import { profile } from "console";
 
 type UserStore = {
   accountId: string | null;
@@ -196,6 +185,8 @@ export const useUserStore = defineStore(STORE_KEY, {
           .rpc(); // Send the transaction
       }
     },
+
+    async transferSol({ to, amount }: { to: string; amount: number }) {},
 
     async fetchUser(account_id: PublicKey): Promise<any> {
       const contract = await this.getContract();
