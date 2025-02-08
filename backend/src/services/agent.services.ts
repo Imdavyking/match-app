@@ -25,7 +25,7 @@ const toolsLangChain = {
     name: "getRequest",
     description: "Get or Fetch a request by ID.",
     schema: z.object({
-      id: z.string(),
+      id: z.number(),
     }),
   }),
   createStore: tool(() => undefined, {
@@ -62,7 +62,7 @@ const toolsLangChain = {
     name: "fetchUserById",
     description: "Get/Fetch user details by ID.",
     schema: z.object({
-      id: z.string(),
+      id: z.number(),
     }),
   }),
 };

@@ -420,16 +420,9 @@ export const useUserStore = defineStore(STORE_KEY, {
           },
         ]);
 
-        const user_ = userInfo[0];
+        console.log({ userInfo });
 
-        const userStores = await contract.account.store.all([
-          {
-            memcmp: {
-              offset: 8 + 0,
-              bytes: user_.account.authority,
-            },
-          },
-        ]);
+        const user_ = userInfo[0];
 
         const user: any = {
           id: user_.account.id.toString(),
@@ -444,6 +437,17 @@ export const useUserStore = defineStore(STORE_KEY, {
           accountType: Object.keys(user_.account.accountType)[0],
           userAddress: user_.account.authority.toBase58(),
         };
+
+        return user;
+
+        const userStores = await contract.account.store.all([
+          {
+            memcmp: {
+              offset: 8 + 0,
+              bytes: user_.account.authority,
+            },
+          },
+        ]);
 
         user.stores = userStores.map((store: any) => {
           return {

@@ -38,7 +38,7 @@ export class AIAgent {
           return `Failed to transfer ${amount} SOL to ${to}`;
         }
       },
-      createUserAI: async ({
+      createUser: async ({
         username,
         account_type,
         phone,
@@ -64,7 +64,7 @@ export class AIAgent {
           return `Failed to create user with username ${username}`;
         }
       },
-      updateUserAI: async ({}: {}) => {
+      updateUser: async ({}: {}) => {
         try {
           await userStore.updateUser({
             account_type: userStore.accountType,
@@ -76,7 +76,7 @@ export class AIAgent {
           return `Failed to update user with username ${userStore.username}`;
         }
       },
-      createRequestAI: async ({
+      createRequest: async ({
         name,
         description,
       }: {
@@ -97,7 +97,7 @@ export class AIAgent {
           return `Failed to create request: ${error}`;
         }
       },
-      getRequestAI: async ({ id }: { id: string }) => {
+      getRequest: async ({ id }: { id: string }) => {
         try {
           const request = await requestStore.getRequest(+id);
           return JSON.stringify(request);
@@ -105,7 +105,7 @@ export class AIAgent {
           return `Failed to get request: ${id}`;
         }
       },
-      createStoreAI: async ({
+      createStore: async ({
         name,
         description,
       }: {
@@ -129,7 +129,7 @@ export class AIAgent {
           return `Failed to create store with name ${name}`;
         }
       },
-      toggleLocationAI: async ({ isEnabled }: { isEnabled: boolean }) => {
+      toggleLocation: async ({ isEnabled }: { isEnabled: boolean }) => {
         try {
           await userStore.toggleEnableLocation(isEnabled);
           return `Location is now ${isEnabled ? "enabled" : "disabled"}`;
@@ -137,7 +137,7 @@ export class AIAgent {
           return `Failed to toggle location to ${isEnabled}`;
         }
       },
-      fetchUserByIdAI: async ({ id }: { id: string }) => {
+      fetchUserById: async ({ id }: { id: string }) => {
         try {
           const response = await userStore.fetchUserById(+id);
           return JSON.stringify(response);
