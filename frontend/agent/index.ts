@@ -6,7 +6,10 @@ import { useUserStore } from "@/pinia/user";
 import { useStoreStore } from "@/pinia/store";
 import { AiResponseType, ToolCall, AccountType } from "../types";
 import { generateSlug, RandomWordOptions } from "random-word-slugs";
+import { createPinia, setActivePinia } from "pinia";
 
+const pinia = createPinia();
+setActivePinia(pinia);
 const requestStore = useRequestsStore();
 const userStore = useUserStore();
 const storeStore = useStoreStore();
