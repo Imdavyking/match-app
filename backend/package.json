@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "start": "ts-node -r tsconfig-paths/register src/app.ts",
+    "start": "node build/src/app.js",
     "build": "tsc -p tsconfig.json",
     "prestart:prod": "npm run build",
     "start:prod": "node build/app.js",
