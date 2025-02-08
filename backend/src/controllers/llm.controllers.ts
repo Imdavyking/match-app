@@ -19,7 +19,7 @@ export const processLLMRequest = async (req: Request, res: Response) => {
       return;
     }
 
-    const generateActions = await runAIAgent([new HumanMessage(task)]);
+    const generateActions = await runAIAgent(task);
 
     res.json(generateActions);
   } catch (error) {

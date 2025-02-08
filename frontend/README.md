@@ -84,14 +84,15 @@ Our solution is evaluated based on the following criteria:
    Create a `.env` file in the root directory and add the following variables:
 
    ```bash
-   LIGHTHOUSE_API_KEY = 274f65XXXXXXX47
-   CONTRACT_ID = gSh52u5Nt39rb8CSHQhUhF1cSdFsL9JebSoPZmazFrZ
-   CHAIN_ID = 97
-   GOOGLE_MAPS_API_KEY = AIzaSXXXXXXXXXIPepz_29
-   SOLANA_RPC_URL = https://little-intensive-patina.solana-devnet.quiknode.pro/bcXXXXXXXXa7b578
-   SOLANA_CHAIN_ID = solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
-   SOL_MINT = SOL
-   PY_USD_MINT = CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM
+   LIGHTHOUSE_API_KEY=274f65XXXXXXX47
+   CONTRACT_ID=gSh52u5Nt39rb8CSHQhUhF1cSdFsL9JebSoPZmazFrZ
+   CHAIN_ID=97
+   GOOGLE_MAPS_API_KEY=AIzaSXXXXXXXXXIPepz_29
+   SOLANA_RPC_URL=https://little-intensive-patina.solana-devnet.quiknode.pro/bcXXXXXXXXa7b578
+   SOLANA_CHAIN_ID=solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1
+   SOL_MINT=SOL
+   PY_USD_MINT=CXk2AMBfi3TwaEL2468s6zP8xq9NxTXjp9gjMgzeUynM
+   BACKEND_URL=http://localhost:3100
    ```
 
 4. **Start the Development Server:**
