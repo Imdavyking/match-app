@@ -1,10 +1,11 @@
-import { HfAgent, LLMFromHub } from "@huggingface/agents";
+import { HfAgent, LLMFromHub, defaultTools } from "@huggingface/agents";
 import dotenv from "dotenv";
 import type { Tool } from "@huggingface/agents/src/types";
 
 dotenv.config();
 type Data = string | Blob | ArrayBuffer;
 const tools: Tool[] = [
+  ...defaultTools,
   {
     name: "createRequestAI",
     description:
@@ -184,10 +185,7 @@ export async function runAIAgent(messages: string) {
   try {
     const agent = new HfAgent(
       process.env.HUGGINGFACE_API_KEY!,
-      LLMFromHub(
-        process.env.HUGGINGFACE_API_KEY!,
-        "OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5"
-      ),
+      LLMFromHub(process.env.HUGGINGFACE_API_KEY!),
       tools
     );
 
