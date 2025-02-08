@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "app.js",
   "scripts": {
     "dev": "nodemon src/app.ts",
     "start": "ts-node -r tsconfig-paths/register src/app.ts",
