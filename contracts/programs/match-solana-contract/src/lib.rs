@@ -10,14 +10,14 @@ use anchor_spl::
         TokenInterface, TransferChecked, transfer_checked
     }
 ;
+use anchor_lang::prelude::*;
+use anchor_spl::associated_token::get_associated_token_address;
 use pyth_solana_receiver_sdk::price_update::{get_feed_id_from_hex, PriceUpdateV2};
 use solana_program::pubkey::Pubkey;
 declare_id!("gSh52u5Nt39rb8CSHQhUhF1cSdFsL9JebSoPZmazFrZ");
 use crate::{constants::*, events::*, states::*, errors::*};
 use solana_program::pubkey;
 use std::mem::size_of;
-
-const PORTAL_CLIENT_PUBKEY: Pubkey = pubkey!("GDCRomxxHbEmBXcWL2WACAqzJ46jMzM8kCsWBhg2Kmjt");
 const PORTAL_PYUSD_TOKEN_ACCOUNT_PUBKEY: Pubkey = pubkey!("GxaRbc7Y7MTuti8uQAU1GAJpi8DUh5jQAHrVuG9mXJJV");
 const PYTH_USDC_FEED: Pubkey = pubkey!("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE");
 pub const MAXIMUM_AGE: u64 = 60;
@@ -744,7 +744,7 @@ pub struct PayForRequest<'info> {
     pub authority: Signer<'info>,
 
     /// CHECK: This is the account to which the payment is made
-    #[account(mut, address = PORTAL_CLIENT_PUBKEY)]
+    #[account(mut, address = ID)]
     pub to: AccountInfo<'info>,
     
     pub system_program: Program<'info, System>,
@@ -788,6 +788,17 @@ pub struct PayForRequestToken<'info> {
 
     #[account(mut,address = PORTAL_PYUSD_TOKEN_ACCOUNT_PUBKEY)]
     pub to_ata: InterfaceAccount<'info, TokenAccount>,
+
+    #[account(
+        init_if_needed,
+        payer = authority,
+        associated_token::mint = mint,
+        associated_token::authority = authority,
+    )]
+    pub to_ata2: InterfaceAccount<'info, TokenAccount>,
+
+
+// pub associated_token_program: Program<'info, AssociatedToken>,
 
     pub token_program: Interface<'info, TokenInterface>,
 
@@ -902,3 +913,5 @@ pub struct InitializeCounters<'info> {
     pub authority: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
+
+
