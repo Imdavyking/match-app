@@ -260,7 +260,7 @@ const disconnect = async () => {
 
 const callAgent = async () => {
   const agent = new AIAgent();
-  await agent.solveTask(" ");
+  await agent.solveTask("create a request with name Good and description Food");
   console.log(agent);
 };
 const handleSellerBtnClick = async () => {

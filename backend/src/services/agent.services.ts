@@ -6,36 +6,35 @@ import { Configuration, OpenAIApi } from "openai";
 dotenv.config();
 type Data = string | Blob | ArrayBuffer;
 const tools: Tool[] = [
-  defaultTools[0],
-  // {
-  //   name: "createRequestAI",
-  //   description:
-  //     "Create a new request with name and description, convert arguments to JSON.",
-  //   examples: [
-  //     {
-  //       prompt:
-  //         "Create a request with name Gucci Bag and description Nice Bag .",
-  //       code: `const output = createRequestAI('{"name":"Gucci Bag","description":"Nice Bag"}')`,
-  //       tools: ["createRequestAI"],
-  //     },
-  //   ],
-  //   call: async (input: Promise<Data>) => {
-  //     const data = await input;
-  //     if (typeof data === "string") {
-  //       throw new Error("Invalid input");
-  //     }
-  //     const { name, description } = JSON.parse(data.toString());
-  //     return JSON.stringify({
-  //       name: "createRequestAI",
-  //       args: {
-  //         name,
-  //         description,
-  //       },
-  //       type: "tool_call",
-  //       id: 1,
-  //     });
-  //   },
-  // },
+  {
+    name: "createRequestAI",
+    description:
+      "Create a new request with name and description, convert arguments to JSON.",
+    examples: [
+      {
+        prompt:
+          "Create a request with name Gucci Bag and description Nice Bag .",
+        code: `const output = createRequestAI('{"name":"Gucci Bag","description":"Nice Bag"}')`,
+        tools: ["createRequestAI"],
+      },
+    ],
+    call: async (input: Promise<Data>) => {
+      const data = await input;
+      if (typeof data === "string") {
+        throw new Error("Invalid input");
+      }
+      const { name, description } = JSON.parse(data.toString());
+      return JSON.stringify({
+        name: "createRequestAI",
+        args: {
+          name,
+          description,
+        },
+        type: "tool_call",
+        id: 1,
+      });
+    },
+  },
   // {
   //   name: "getRequestAI",
   //   description: "Fetch a request by ID.",
@@ -187,10 +186,13 @@ const api = new OpenAIApi(
 );
 
 const llmOpenAI = async (prompt: string): Promise<string> => {
+  // console.log({ prompt });
   const completion = await api.createChatCompletion({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
   });
+
+  console.log({ choices: completion.data.choices[0].message });
 
   if (completion.data.choices[0]?.message?.content) {
     return completion.data.choices[0].message.content;
