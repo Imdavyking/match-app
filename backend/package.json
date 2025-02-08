@@ -57,6 +57,6 @@
     "node_modules_custom"
   ],
   "_moduleAliases": {
-    "@src": "./dist"
+    "@src": "./build"
   }
 }
