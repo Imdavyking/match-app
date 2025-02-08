@@ -85,10 +85,9 @@
             @click="handleSend"
             class="tw-bg-[#28334e] tw-text-white tw-px-4 tw-py-2 tw-rounded-r-md hover:tw-bg-[#28334e] tw-transition tw-duration-300"
           >
-            <FaSpinner
-              v-if="isProcessing"
-              class="tw-w-5 tw-h-5 tw-animate-spin"
-            />
+            <v-icon v-if="isProcessing" class="tw-w-5 tw-h-5 tw-animate-spin">
+              mdi-loading
+            </v-icon>
             <span v-else>Send</span>
           </button>
         </div>
