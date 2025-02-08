@@ -73,7 +73,7 @@
           </div>
         </div>
 
-        <BotUploadImage class="tw-mx-8 tw-mb-3" />
+        <BotUploadImage v-if="chatBotStore.addImages" class="tw-mx-8 tw-mb-3" />
 
         <div class="tw-p-4 tw-border-t tw-flex">
           <input
