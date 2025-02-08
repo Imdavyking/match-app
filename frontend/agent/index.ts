@@ -53,7 +53,7 @@ export class AIAgent {
           });
           return `User created with username ${username}`;
         } catch (error) {
-          return `Failed to create user: ${error}`;
+          return `Failed to create user with username ${username}`;
         }
       },
       updateUserAI: async ({}: {}) => {
@@ -65,7 +65,7 @@ export class AIAgent {
           });
           return `User updated`;
         } catch (error) {
-          return `Failed to update user: ${error}`;
+          return `Failed to update user with username ${userStore.username}`;
         }
       },
       createRequestAI: async ({
@@ -94,7 +94,7 @@ export class AIAgent {
           const request = await requestStore.getRequest(+id);
           return JSON.stringify(request);
         } catch (error) {
-          return `Failed to get request: ${error}`;
+          return `Failed to get request: ${id}`;
         }
       },
       createStoreAI: async ({
@@ -118,7 +118,7 @@ export class AIAgent {
           });
           return `Store created with id ${response.id}`;
         } catch (error) {
-          return `Failed to create store: ${error}`;
+          return `Failed to create store with name ${name}`;
         }
       },
       toggleLocationAI: async ({ isEnabled }: { isEnabled: boolean }) => {
@@ -126,7 +126,7 @@ export class AIAgent {
           await userStore.toggleEnableLocation(isEnabled);
           return `Location is now ${isEnabled ? "enabled" : "disabled"}`;
         } catch (e) {
-          return `Failed to toggle location: ${e}`;
+          return `Failed to toggle location to ${isEnabled}`;
         }
       },
       fetchUserByIdAI: async ({ id }: { id: string }) => {
@@ -134,7 +134,7 @@ export class AIAgent {
           const response = await userStore.fetchUserById(+id);
           return JSON.stringify(response);
         } catch (error) {
-          return `Failed to fetch user: ${error}`;
+          return `Failed to fetch user with id ${id}`;
         }
       },
     };

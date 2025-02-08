@@ -260,10 +260,10 @@ const disconnect = async () => {
 
 const callAgent = async () => {
   const agent = new AIAgent();
-  await agent.solveTask(
+  const response = await agent.solveTask(
     "create a seller user with name Good and phone 0813384883"
   );
-  console.log(agent);
+  console.log(response);
 };
 const handleSellerBtnClick = async () => {
   if (isSeller.value) {
