@@ -240,10 +240,10 @@ pub mod marketplace {
         let authority = &ctx.accounts.authority;
         let request_payment_info = &mut ctx.accounts.request_payment_info;
 
-        let (pda, _bump) = Pubkey::find_program_address(
-            &[REQUEST_PAYMENT_TAG],
-            ctx.program_id
-        );
+        // let (pda, bump) = Pubkey::find_program_address(
+        //     &[REQUEST_PAYMENT_TAG],
+        //     ctx.program_id
+        // );
 
         let bump_seed = ctx.bumps.request_payment_counter;
         let signer_seeds : &[&[&[u8]]] = &[&[REQUEST_PAYMENT_TAG, &[bump_seed]]];
