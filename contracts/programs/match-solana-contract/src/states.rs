@@ -76,6 +76,13 @@ pub struct RequestPaymentTransaction {
 pub struct Counter {
     pub current: u64,
 }
+
+
+#[account]
+pub struct PyusdtAccount {
+    pub address: Pubkey,
+}
+
 #[derive(Debug, AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct Location {
     pub latitude: i128,
@@ -115,3 +122,4 @@ impl Default for CoinPayment {
         CoinPayment::Solana
     }
 }
+

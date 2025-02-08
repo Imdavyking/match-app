@@ -10,8 +10,6 @@ use anchor_spl::
         TokenInterface, TransferChecked, transfer_checked
     }
 ;
-use anchor_lang::prelude::*;
-use anchor_spl::associated_token::get_associated_token_address;
 use pyth_solana_receiver_sdk::price_update::{get_feed_id_from_hex, PriceUpdateV2};
 use solana_program::pubkey::Pubkey;
 declare_id!("gSh52u5Nt39rb8CSHQhUhF1cSdFsL9JebSoPZmazFrZ");
@@ -797,9 +795,8 @@ pub struct PayForRequestToken<'info> {
     )]
     pub to_ata2: InterfaceAccount<'info, TokenAccount>,
 
-
-// pub associated_token_program: Program<'info, AssociatedToken>,
-
+    pub associated_token_program: Program<'info, anchor_spl::associated_token::AssociatedToken>,
+    
     pub token_program: Interface<'info, TokenInterface>,
 
     /// CHECK: this is the price feed
