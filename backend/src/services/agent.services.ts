@@ -1,5 +1,6 @@
 import { HfAgent, defaultTools } from "@huggingface/agents";
 import dotenv from "dotenv";
+import { id } from "ethers";
 
 dotenv.config();
 
@@ -23,9 +24,13 @@ const tools = [
       description: string;
     }) => {
       return {
-        name,
-        description,
-        toolName: "createRequestAI",
+        name: "createRequestAI",
+        args: {
+          name,
+          description,
+        },
+        type: "tool_call",
+        id: 1,
       };
     },
   },
@@ -40,7 +45,14 @@ const tools = [
       },
     ],
     call: async ({ id }: { id: string }) => {
-      return { id, toolName: "getRequestAI" };
+      return {
+        name: "getRequestAI",
+        args: {
+          id,
+        },
+        type: "tool_call",
+        id: 2,
+      };
     },
   },
   {
@@ -62,9 +74,13 @@ const tools = [
       description: string;
     }) => {
       return {
-        name,
-        description,
-        toolName: "createStoreAI",
+        name: "createStoreAI",
+        args: {
+          name,
+          description,
+        },
+        type: "tool_call",
+        id: 3,
       };
     },
   },
@@ -89,7 +105,16 @@ const tools = [
       account_type: string;
       phone: string;
     }) => {
-      return { username, account_type, phone, toolName: "createUserAI" };
+      return {
+        name: "createUserAI",
+        args: {
+          username,
+          account_type,
+          phone,
+        },
+        type: "tool_call",
+        id: 4,
+      };
     },
   },
   {
@@ -104,7 +129,10 @@ const tools = [
     ],
     call: async ({}) => {
       return {
-        toolName: "updateUserAI",
+        name: "updateUserAI",
+        args: {},
+        type: "tool_call",
+        id: 5,
       };
     },
   },
@@ -119,7 +147,14 @@ const tools = [
       },
     ],
     call: async ({ isEnabled }: { isEnabled: boolean }) => {
-      return { isEnabled, toolName: "toggleLocationAI" };
+      return {
+        name: "toggleLocationAI",
+        args: {
+          isEnabled,
+        },
+        type: "tool_call",
+        id: 6,
+      };
     },
   },
   {
@@ -134,12 +169,15 @@ const tools = [
     ],
     call: async ({ id }: { id: string }) => {
       return {
-        id,
-        toolName: "fetchUserByIdAI",
+        name: "fetchUserByIdAI",
+        args: {
+          id,
+        },
+        type: "tool_call",
+        id: 7,
       };
     },
   },
-  ...defaultTools,
 ];
 
 export async function runAIAgent(messages: string) {
