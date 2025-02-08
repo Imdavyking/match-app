@@ -160,9 +160,9 @@ export class AIAgent {
   }
 
   public async solveTask(task: string): Promise<string[]> {
-    // const action = (await callLLMApi({
+    // const action: AiResponseType = await callLLMApi({
     //   task,
-    // })) as AiResponseType; // REAL one
+    // }); // REAL one
     const action: AiResponseType = {
       content: "",
       tool_calls: [

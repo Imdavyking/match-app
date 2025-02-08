@@ -85,11 +85,11 @@ const tools: Tool[] = [
   },
   {
     name: "createUserAI",
-    description: "Create a new user.",
+    description: "Create a new user, account type must be seller or buyer.",
     examples: [
       {
         prompt:
-          "Create a new buyer user with name john_doe and phone 1234567890.",
+          "Create a new buyer user with name john_doe and phone 1234567890, account type buyer.",
         code: `const output = createUserAI('{"username":"john_doe","account_type":"buyer","phone":"1234567890"}')`,
         tools: ["createUserAI"],
       },

@@ -260,7 +260,9 @@ const disconnect = async () => {
 
 const callAgent = async () => {
   const agent = new AIAgent();
-  await agent.solveTask("create a user with name Good and description Food");
+  await agent.solveTask(
+    "create a seller user with name Good and phone 0813384883"
+  );
   console.log(agent);
 };
 const handleSellerBtnClick = async () => {
