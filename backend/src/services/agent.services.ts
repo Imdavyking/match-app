@@ -1,9 +1,10 @@
-import { HfAgent, defaultTools } from "@huggingface/agents";
+import { HfAgent, LLMFromHub } from "@huggingface/agents";
 import dotenv from "dotenv";
+import type { Tool } from "@huggingface/agents/src/types";
 
 dotenv.config();
 type Data = string | Blob | ArrayBuffer;
-const tools = [
+const tools: Tool[] = [
   {
     name: "createRequestAI",
     description:
@@ -22,7 +23,7 @@ const tools = [
         throw new Error("Invalid input");
       }
       const { name, description } = JSON.parse(data.toString());
-      return {
+      return JSON.stringify({
         name: "createRequestAI",
         args: {
           name,
@@ -30,7 +31,7 @@ const tools = [
         },
         type: "tool_call",
         id: 1,
-      };
+      });
     },
   },
   // {
@@ -180,11 +181,19 @@ const tools = [
 ];
 
 export async function runAIAgent(messages: string) {
-  const agent = new HfAgent(
-    process.env.HUGGINGFACE_API_KEY!,
-    undefined,
-    tools as any
-  );
+  try {
+    const agent = new HfAgent(
+      process.env.HUGGINGFACE_API_KEY!,
+      LLMFromHub(
+        process.env.HUGGINGFACE_API_KEY!,
+        "OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5"
+      ),
+      tools
+    );
 
-  return await agent.run(messages);
+    return await agent.run(messages);
+  } catch (error) {
+    console.error(error);
+    return {};
+  }
 }
