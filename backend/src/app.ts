@@ -40,7 +40,7 @@ app.use(
 );
 
 // Database connection
-connectDB();
+// connectDB();
 
 // Routes
 app.use("/api/llm", llmRoutes);

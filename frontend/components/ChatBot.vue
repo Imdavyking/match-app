@@ -22,7 +22,7 @@
         >
           <h3 class="tw-text-lg tw-font-semibold tw-text-gray-700">Commands</h3>
           <ul class="tw-list-disc tw-ml-5 tw-mt-2 tw-text-gray-600">
-            <li v-for="(desc, key) in agent.toolsInfo" :key="key">
+            <li v-for="(desc, key) in chatBotStore.toolsInfo" :key="key">
               <strong>{{ key }}:</strong> {{ desc }}.
             </li>
           </ul>
@@ -105,18 +105,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { AIAgent } from "@/agent/index";
+// import { AIAgent } from "@/agent/index";
 import { toast } from "vue-sonner";
 import { useChatBot } from "@/pinia/chatbot";
 
 const chatBotStore = useChatBot();
 
-console.log({ chatBotStore });
-console.log(chatBotStore.addImages);
-
 const showImage = ref(false);
 const isChatboxOpen = ref(true);
-const agent = new AIAgent();
+
 const messages = ref<
   {
     text: string;
@@ -139,8 +136,9 @@ const handleSend = async () => {
     userInput.value = "";
     try {
       isProcessing.value = true;
-      const response = await agent.solveTask(data);
-      respondToUser(response);
+      await chatBotStore.solveTask(data);
+      // const response = await agent.solveTask(data);
+      // respondToUser(response);
     } catch (error: any) {
       toast.error(`Failed to perform action ${error.message}`);
     } finally {
