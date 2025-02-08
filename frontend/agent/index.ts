@@ -8,7 +8,8 @@ import { generateSlug, RandomWordOptions } from "random-word-slugs";
 import { createPinia, setActivePinia } from "pinia";
 import { useAnchorWallet } from "solana-wallets-vue";
 import { callLLMApi } from "../services/llm.services";
-// import { callChatBotToGetImages } from "../components/ChatBot.vue";
+import { useChatBot } from "@/pinia/chatbot";
+
 const anchor = useAnchorWallet();
 
 const pinia = createPinia();
@@ -85,10 +86,13 @@ export class AIAgent {
         name: string;
         description: string;
       }) => {
+        const chatStore = useChatBot();
         try {
           // const images: string[] = await callChatBotToGetImages({
           //   description: "Upload images",
           // });
+
+          chatStore.addImages = true;
 
           const images: string[] = [];
 

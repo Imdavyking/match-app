@@ -73,6 +73,13 @@
           </div>
         </div>
 
+        <div v-if="chatBotStore.addImages" class="tw-p-4 tw-border-t tw-flex">
+          <input
+            type="file"
+            class="tw-w-full tw-px-3 tw-py-2 tw-border tw-text-black tw-rounded-l-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#28334e]"
+          />
+        </div>
+
         <div class="tw-p-4 tw-border-t tw-flex">
           <input
             v-model="userInput"
@@ -88,7 +95,7 @@
             <v-icon v-if="isProcessing" class="tw-w-5 tw-h-5 tw-animate-spin">
               mdi-loading
             </v-icon>
-            <span v-else>Send</span>
+            <span v-else>Send {{ chatBotStore.addImages }}</span>
           </button>
         </div>
       </div>
@@ -98,23 +105,14 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { AIAgent } from "../agent/index";
+import { AIAgent } from "@/agent/index";
 import { toast } from "vue-sonner";
+import { useChatBot } from "@/pinia/chatbot";
 
-const callChatBotToGetImages = async ({
-  description,
-}: {
-  description: string;
-}): Promise<any[]> => {
-  showImage.value = true;
+const chatBotStore = useChatBot();
 
-  console.log("Yeeeee");
-
-  // display a file input
-  // the user will upload a file
-  // the user will
-  return [];
-};
+console.log({ chatBotStore });
+console.log(chatBotStore.addImages);
 
 const showImage = ref(false);
 const isChatboxOpen = ref(true);
