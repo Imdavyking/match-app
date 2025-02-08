@@ -40,6 +40,7 @@ export class AIAgent {
         try {
           const lat = 0;
           const long = 0;
+
           const usernameSlug = generateSlug(2, options);
           await userStore.createUser({
             username: username || usernameSlug,
