@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "start": "node ../build/app.js",
-    "build": "tsc -p tsconfig.json && && ls build",
-    "prestart:prod": "npm run build",
-    "start:prod": "node ../build/app.js",
+    "start": "ts-node -r tsconfig-paths/register src/app.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
