@@ -1,11 +1,16 @@
 <template>
   <div>
     <input
+      v-show="!isUploading"
       @change="handleFileUpload"
       type="file"
-      class="tw-w-full tw-px-3 tw-py-2 tw-border tw-text-black tw-rounded-l-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#28334e]"
+      class="file:tw-mr-4 file:tw-rounded-full filetw-:border-0 file:tw-bg-violet-50
+      file:tw-px-4 file:tw-py-2 file:tw-text-sm file:tw-font-semibold file:tw-text-black
+      hover:file:tw-bg-violet-100"
     />
-    <v-icon class="tw-w-5 tw-h-5 tw-animate-spin" v-if="isUploading">
+    <v-icon
+      v-show="isUploading"
+      class="tw-w-5 tw-h-5 tw-animate-spin" v-if="isUploading">
       mdi-loading
     </v-icon>
   </div>

@@ -72,7 +72,8 @@
             </p>
           </div>
         </div>
-        <BotUploadImage v-if="chatBotStore.addImages" />
+
+        <BotUploadImage class="tw-mx-8 tw-mb-3" />
 
         <div class="tw-p-4 tw-border-t tw-flex">
           <input
