@@ -1,6 +1,5 @@
 import { HfAgent, defaultTools } from "@huggingface/agents";
 import dotenv from "dotenv";
-import { id } from "ethers";
 
 dotenv.config();
 
