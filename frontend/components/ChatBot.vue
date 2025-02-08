@@ -97,59 +97,67 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref } from "vue";
 import { AIAgent } from "../agent/index";
 import { toast } from "vue-sonner";
 
-export default {
-  components: {},
-  setup() {
-    const isChatboxOpen = ref(true);
-    const agent = new AIAgent();
-    const messages = ref([]);
-    const userInput = ref("");
-    const isProcessing = ref(false);
+const callChatBotToGetImages = async ({
+  description,
+}: {
+  description: string;
+}): Promise<any[]> => {
+  showImage.value = true;
 
-    const toggleChatbox = () => {
-      isChatboxOpen.value = !isChatboxOpen.value;
-    };
+  console.log("Yeeeee");
 
-    const handleSend = async () => {
-      if (userInput.value.trim() !== "") {
-        messages.value.push({ text: userInput.value, sender: "user" });
-        const data = userInput.value;
-        userInput.value = "";
-        try {
-          isProcessing.value = true;
-          const response = await agent.solveTask(data);
-          respondToUser(response);
-        } catch (error) {
-          toast.error(`Failed to perform action ${error.message}`);
-        } finally {
-          isProcessing.value = false;
-        }
-      }
-    };
+  // display a file input
+  // the user will upload a file
+  // the user will
+  return [];
+};
 
-    const respondToUser = (response) => {
-      setTimeout(() => {
-        response.forEach((res) => {
-          messages.value.push({ text: res, sender: "bot" });
-        });
-      }, 500);
-    };
+const showImage = ref(false);
+const isChatboxOpen = ref(true);
+const agent = new AIAgent();
+const messages = ref<
+  {
+    text: string;
+    sender: "user" | "bot";
+  }[]
+>([]);
 
-    return {
-      isChatboxOpen,
-      agent,
-      messages,
-      userInput,
-      isProcessing,
-      toggleChatbox,
-      handleSend,
-    };
-  },
+// { text: res, sender: "bot" }
+const userInput = ref("");
+const isProcessing = ref(false);
+
+const toggleChatbox = () => {
+  isChatboxOpen.value = !isChatboxOpen.value;
+};
+
+const handleSend = async () => {
+  if (userInput.value.trim() !== "") {
+    messages.value.push({ text: userInput.value, sender: "user" });
+    const data = userInput.value;
+    userInput.value = "";
+    try {
+      isProcessing.value = true;
+      const response = await agent.solveTask(data);
+      respondToUser(response);
+    } catch (error: any) {
+      toast.error(`Failed to perform action ${error.message}`);
+    } finally {
+      isProcessing.value = false;
+    }
+  }
+};
+
+const respondToUser = (response: string[]) => {
+  setTimeout(() => {
+    response.forEach((res) => {
+      messages.value.push({ text: res, sender: "bot" });
+    });
+  }, 500);
 };
 </script>
 

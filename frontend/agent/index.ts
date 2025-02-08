@@ -8,6 +8,7 @@ import { generateSlug, RandomWordOptions } from "random-word-slugs";
 import { createPinia, setActivePinia } from "pinia";
 import { useAnchorWallet } from "solana-wallets-vue";
 import { callLLMApi } from "../services/llm.services";
+// import { callChatBotToGetImages } from "../components/ChatBot.vue";
 const anchor = useAnchorWallet();
 
 const pinia = createPinia();
@@ -38,6 +39,7 @@ export class AIAgent {
           return `Failed to transfer ${amount} SOL to ${to}`;
         }
       },
+
       createUser: async ({
         username,
         account_type,
@@ -84,7 +86,13 @@ export class AIAgent {
         description: string;
       }) => {
         try {
+          // const images: string[] = await callChatBotToGetImages({
+          //   description: "Upload images",
+          // });
+
           const images: string[] = [];
+
+          return;
           await requestStore.createRequest({
             name,
             description,
