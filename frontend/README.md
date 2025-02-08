@@ -49,95 +49,6 @@ Our solution is evaluated based on the following criteria:
    - **GetOfferImages:** Retrieve all images associated with a specific offer.
    - **GetRequestSellerIds:** Retrieve all seller IDs associated with a specific request.
 
-### Demo
-
-Check out our demo video to see Match in action! The video showcases the technical strengths, usability, and performance of our solution. Watch the walkthrough on [YouTube](https://www.youtube.com/watch?v=fVnm9ttV68o) to learn more about how Match can revolutionize the marketplace experience on Solana.
-
-
-### Portal Integration with Match
-
-We integrate **Portal** for handling Solana transactions in Match.
-
-#### Setup Portal in Your Application
-
-1. **Install the Portal SDK**:
-   Make sure you have the Portal SDK installed in your project:
-   
-   ```bash
-   yarn add @portal-hq/web
-   ```
-
-2. **Initialize Portal**:
-   In your project, you can initialize the Portal instance by creating a file for the configuration.
-
-   ```js
-   import Portal from "@portal-hq/web";
-   const env = useRuntimeConfig().public;
-
-   export const portal = new Portal({
-     apiKey: env.portalClientApiKey,  // Portal client API key from your environment variables
-     autoApprove: true,                // Enable auto-approval of transactions
-     rpcConfig: {
-       [env.solanaChainId]: env.solanaRpcUrl,  // Set RPC URL for the Solana chain
-     },
-   });
-
-   portal.triggerReady();  // Initialize the Portal instance
-   ```
-
-3. **Sending Tokens on Solana Using Portal**:
-
-   You can create a function to send tokens on Solana through the Portal interface.
-
-   ```ts
-   export const sendTokensOnSolana = async (requestId: number) => {
-     if (!portal || !portal?.ready) {
-       throw new Error("Portal has not been initialized");
-     }
-
-     // Fetch the transaction data from your backend
-     const res = await fetch(`${env.portalBackendUrl}/api/${ntobs58(requestId)}`, {
-       method: "POST",
-     });
-
-     const data = await res.json();
-
-     // Check if a transaction hash was returned
-     if (data.transactionHash) return data.transactionHash;
-
-     if (data.error) throw new Error(data.error);
-
-     // Request signature and send transaction using Portal
-     const txnHash = await portal.request({
-       chainId: env.solanaChainId,                   // Solana chain ID
-       method: "sol_signAndSendTransaction",         // Method to sign and send transaction
-       params: data.transaction,                     // Pass the transaction data
-     });
-
-     if (!txnHash) throw new Error("Transaction failed");
-
-     // Notify your backend of the completed transaction
-     await fetch(`${env.portalBackendUrl}/api/payment/${requestId}`, {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify({
-         requestId,              // Send the requestId and transaction hash to the backend
-         transactionHash: txnHash,
-       }),
-     });
-
-     return txnHash;   // Return the transaction hash as confirmation
-   };
-   ```
-
-### Key Components of Portal Integration
-
-1. **Portal Initialization**: The `portal` instance is initialized with the API key, RPC configurations, and options for handling Solana transactions.
-2. **Transaction Handling**: The `sendTokensOnSolana` function triggers the Portal SDK to handle transaction signing and submission. It fetches transaction details from the backend, processes the transaction, and submits the transaction hash back to the server.
-
-
 ### Future Roadmap
 
 **Key Learnings:**
@@ -158,8 +69,8 @@ We integrate **Portal** for handling Solana transactions in Match.
 1. **Clone the Repository:**
 
    ```bash
-   git https://github.com/Kingsmen-hackers/match-solana
-   cd match-solana
+   git https://github.com/Kingsmen-hackers/match-app
+   cd match-app/frontend
    ```
 
 2. **Install Dependencies:**
@@ -206,10 +117,6 @@ We integrate **Portal** for handling Solana transactions in Match.
 - **Accepting Offers:** Buyers can browse offers related to their requests, accept the most suitable ones, and initiate transactions.
 - **Managing Stores:** Sellers can manage their stores, view store details, and retrieve all their store IDs.
 
-### Contracts
-
-- https://github.com/kingsmennn/match-contract-solana
-
 ### Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes. Ensure that your code adheres to the existing code style and includes appropriate test coverage.
@@ -221,5 +128,3 @@ Match is licensed under the MIT License.
 ---
 
 With Match, experience a seamless, secure, and efficient marketplace on the Solana network, where buyers and sellers connect with confidence.
-
-# match-solana
