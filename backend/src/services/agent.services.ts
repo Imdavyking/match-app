@@ -212,7 +212,7 @@ export async function runAIAgent(messages: string) {
     const results = [];
     for (const res of response) {
       try {
-        results.push(JSON.parse((await res.data) as string));
+        results.push(JSON.parse(res.data as string));
       } catch (error) {}
     }
 

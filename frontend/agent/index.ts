@@ -160,23 +160,23 @@ export class AIAgent {
   }
 
   public async solveTask(task: string): Promise<string[]> {
-    // const action: AiResponseType = await callLLMApi({
-    //   task,
-    // }); // REAL one
-    const action: AiResponseType = {
-      content: "",
-      tool_calls: [
-        {
-          name: "createUserAI",
-          args: {
-            username: "Good",
-            account_type: "user",
-          },
-          type: "tool_call",
-          id: 4,
-        },
-      ],
-    };
+    const action: AiResponseType = await callLLMApi({
+      task,
+    }); // REAL one
+    // const action: AiResponseType = {
+    //   content: "",
+    //   tool_calls: [
+    //     {
+    //       name: "createUserAI",
+    //       args: {
+    //         username: "Good",
+    //         account_type: "user",
+    //       },
+    //       type: "tool_call",
+    //       id: 4,
+    //     },
+    //   ],
+    // };
 
     const results: string[] = [];
 
