@@ -43,7 +43,6 @@
                 @click="
                   async () => {
                     const agent = new AIAgent();
-                    console.log(agent);
                   }
                 "
                 class="tw-inline-block tw-bg-black tw-text-white tw-p-4 tw-py-2.5 tw-mt-4 tw-rounded-lg mr-4"

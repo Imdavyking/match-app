@@ -5,7 +5,6 @@ import {
   CreateOfferDTO,
   CreateRequestDTO,
   Offer,
-  RequestLifecycle,
   RequestLifecycleIndex,
   RequestResponse,
 } from "@/types";
@@ -21,23 +20,18 @@ import {
   REQUEST_TAG,
   USER_TAG,
 } from "@/utils/constants";
-import { request } from "http";
 import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey";
 import { utf8 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { useWallet } from "solana-wallets-vue";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { BN, utils } from "@project-serum/anchor";
-import { off } from "process";
+import { BN } from "@project-serum/anchor";
 import { ntobs58 } from "@/utils/nb58";
 import {
-  getAssociatedTokenAddress,
   getAssociatedTokenAddressSync,
-  getOrCreateAssociatedTokenAccount,
   TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { programID } from "@/utils/constants";
-import { sendTokensOnSolana } from "@/payments/portal";
 const { publicKey, wallet } = useWallet();
 
 const env = useRuntimeConfig().public;
@@ -340,40 +334,45 @@ export const useRequestsStore = defineStore("requests", {
 
         const allRequests = await contract.account.request.all([]);
 
-        const res: any = allRequests.map((request) => {
-          const lifecycle_ = Object.keys(
-            request.account.lifecycle
-          )[0].toUpperCase();
+        const res: any = allRequests
+          .map((request) => {
+            const lifecycle_ = Object.keys(
+              request.account.lifecycle
+            )[0].toUpperCase();
 
-          let lifecycle: RequestLifecycleIndex = RequestLifecycleIndex.PENDING;
+            let lifecycle: RequestLifecycleIndex =
+              RequestLifecycleIndex.PENDING;
 
-          Object.entries(RequestLifecycleIndex).forEach(([key, value]) => {
-            if (key.replaceAll("_", "") === lifecycle_) {
-              lifecycle = value as RequestLifecycleIndex;
+            Object.entries(RequestLifecycleIndex).forEach(([key, value]) => {
+              if (key.replaceAll("_", "") === lifecycle_) {
+                lifecycle = value as RequestLifecycleIndex;
+              }
+            });
+
+            return {
+              requestId: Number(request.account.id),
+              requestName: request.account.name,
+              buyerId: Number(request.account.buyerId),
+              sellersPriceQuote: Number(request.account.sellersPriceQuote),
+              lockedSellerId: Number(request.account.lockedSellerId),
+              description: request.account.description,
+              lifecycle,
+              longitude: Number(request.account.location.longitude.toString()),
+              latitude: Number(request.account.location.latitude.toString()),
+              createdAt: Number(request.account.createdAt.toString()),
+              updatedAt: Number(request.account.updatedAt.toString()),
+              images: request.account.images,
+            };
+          })
+          .filter((request) => {
+            if (
+              request.lifecycle === RequestLifecycleIndex.PENDING ||
+              request.lifecycle === RequestLifecycleIndex.ACCEPTED_BY_SELLER
+            ) {
+              return request;
             }
+            return false;
           });
-
-          return {
-            requestId: Number(request.account.id),
-            requestName: request.account.name,
-            buyerId: Number(request.account.buyerId),
-            sellersPriceQuote: Number(request.account.sellersPriceQuote),
-            lockedSellerId: Number(request.account.lockedSellerId),
-            description: request.account.description,
-            lifecycle,
-            longitude: Number(request.account.location.longitude.toString()),
-            latitude: Number(request.account.location.latitude.toString()),
-            createdAt: Number(request.account.createdAt.toString()),
-            updatedAt: Number(request.account.updatedAt.toString()),
-            images: request.account.images,
-          };
-        }).filter((request) => {
-          if(request.lifecycle === RequestLifecycleIndex.PENDING ||
-            request.lifecycle === RequestLifecycleIndex.ACCEPTED_BY_SELLER) {
-              return request
-            }
-            return false
-        });
 
         this.list = res;
         return res;
@@ -550,8 +549,6 @@ export const useRequestsStore = defineStore("requests", {
     async markRequestAsCompleted(requestId: number) {
       const userStore = useUserStore();
       try {
-        const response = await sendTokensOnSolana(requestId);
-
         const contract = await userStore.getContract();
 
         const request = await contract.account.request.all([
