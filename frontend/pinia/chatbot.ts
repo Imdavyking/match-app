@@ -44,7 +44,7 @@ export const useChatBot = defineStore(STORE_KEY, {
         content: "",
         tool_calls: [
           {
-            name: "createUserAI",
+            name: "createUser",
             args: {
               username: "Good",
               account_type: "buyer",
@@ -73,7 +73,7 @@ export const useChatBot = defineStore(STORE_KEY, {
       return results;
     },
     async executeAction(action: ToolCall) {
-      console.log(action.name);
+      console.log(action.name); // "updateUser"
       return "";
       // const tool = this.tools[action.name];
       // if (!tool) {
