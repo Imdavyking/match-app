@@ -53,5 +53,11 @@
     "nodemon": "^3.1.4",
     "winston-daily-rotate-file": "^5.0.0",
     "zod": "^3.24.1"
+  },
+  "_moduleDirectories": [
+    "node_modules_custom"
+  ],
+  "_moduleAliases": {
+    "@src": "./dist"
   }
 }
