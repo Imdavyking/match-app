@@ -6,12 +6,12 @@ type Data = string | Blob | ArrayBuffer;
 const tools = [
   {
     name: "createRequestAI",
-    description: "Create a new request.",
+    description: "Create a new request, convert arguments to JSON.",
     examples: [
       {
         prompt:
           "Create a request with name Gucci Bag and description Nice Bag .",
-        code: `const output = createRequestAI({ name: 'Gucci Bag', description: 'Nice Bag' })`,
+        code: `const output = createRequestAI('{"name":"Gucci Bag","description":"Nice Bag"}')`,
         tools: ["createRequestAI"],
       },
     ],
