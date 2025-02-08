@@ -184,7 +184,6 @@ const api = new OpenAIApi(
 );
 
 const llmOpenAI = async (prompt: string): Promise<string> => {
-  // console.log({ prompt });
   const completion = await api.createChatCompletion({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
