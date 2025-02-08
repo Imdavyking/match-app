@@ -72,13 +72,7 @@
             </p>
           </div>
         </div>
-
-        <div v-if="chatBotStore.addImages" class="tw-p-4 tw-border-t tw-flex">
-          <input
-            type="file"
-            class="tw-w-full tw-px-3 tw-py-2 tw-border tw-text-black tw-rounded-l-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#28334e]"
-          />
-        </div>
+        <BotUploadImage v-if="chatBotStore.addImages" />
 
         <div class="tw-p-4 tw-border-t tw-flex">
           <input
@@ -95,7 +89,7 @@
             <v-icon v-if="isProcessing" class="tw-w-5 tw-h-5 tw-animate-spin">
               mdi-loading
             </v-icon>
-            <span v-else>Send {{ chatBotStore.addImages }}</span>
+            <span v-else>Send</span>
           </button>
         </div>
       </div>
@@ -108,10 +102,10 @@ import { ref } from "vue";
 // import { AIAgent } from "@/agent/index";
 import { toast } from "vue-sonner";
 import { useChatBot } from "@/pinia/chatbot";
+import BotUploadImage from "@/components/BotUploadImage.vue";
 
 const chatBotStore = useChatBot();
 
-const showImage = ref(false);
 const isChatboxOpen = ref(true);
 
 const messages = ref<

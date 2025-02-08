@@ -2,34 +2,21 @@ import { defineStore } from "pinia";
 import { useRequestsStore } from "@/pinia/request";
 import { useUserStore } from "@/pinia/user";
 import { useStoreStore } from "@/pinia/store";
-import { AiResponseType, ToolCall, AccountType } from "../types";
-import { generateSlug, RandomWordOptions } from "random-word-slugs";
-import { createPinia, setActivePinia } from "pinia";
-import { useAnchorWallet } from "solana-wallets-vue";
+import { AiResponseType, ToolCall } from "../types";
 import { callLLMApi } from "../services/llm.services";
 
 type BotStore = {
   addImages: boolean;
   toolsInfo: { [key: string]: string };
+  uploadedImages: string | null;
 };
-
-// tools: {
-//   createRequest: createRequest,
-//   getRequest: getRequest,
-//   createStore:
-//     "Example: create a store with Gucci Store(name), A nice store(description)",
-//   createUser:
-//     "Example: create a user with John Doe(username), 123456(phone), and buyer(account_type)",
-//   updateUser: "Example: update user with John Doe(username), 123456(phone)",
-//   toggleLocation: "Example: toggle location to true",
-//   fetchUserById: "Example: fetch user with id 1",
-// },
 
 const STORE_KEY = "@chatBotStore";
 
 export const useChatBot = defineStore(STORE_KEY, {
   state: (): BotStore => ({
     addImages: false,
+    uploadedImages: null,
     toolsInfo: {
       createRequest:
         "Example: create a request with Gucci Bag(name), A nice bag(description)",
@@ -47,7 +34,6 @@ export const useChatBot = defineStore(STORE_KEY, {
   actions: {
     async solveTask(task: string): Promise<string[]> {
       const userStore = useUserStore();
-      const anchor = useAnchorWallet();
       const action: AiResponseType = await callLLMApi({
         task,
       });
@@ -114,8 +100,17 @@ export const useChatBot = defineStore(STORE_KEY, {
       const requestStore = useRequestsStore();
       const userStore = useUserStore();
       try {
+        this.uploadedImages = null;
         this.addImages = true;
-        const images: string[] = [];
+
+        // Wait for the user to upload images
+        while (this.uploadedImages === null) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+
+        const images: string[] = [this.uploadedImages!];
+
+        console.log(images);
         await requestStore.createRequest({
           name,
           description,
@@ -128,7 +123,7 @@ export const useChatBot = defineStore(STORE_KEY, {
       } catch (error) {
         return `Failed to create request: ${error}`;
       } finally {
-        this.addImages = false;
+        // this.addImages = false;
       }
     },
     async getRequest({ id }: { id: string }) {
