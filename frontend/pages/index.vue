@@ -180,10 +180,13 @@
       </div>
     </div>
   </div>
+  <ChatBot />
 </template>
 
 <script setup lang="ts">
 import Tabs from "@/components/Tabs.vue";
+import ChatBot from "@/components/ChatBot.vue";
+
 import { User, AccountType, STORE_KEY_MIDDLEWARE, STORE_KEY } from "@/types";
 import { useUserStore } from "@/pinia/user";
 import { AIAgent } from "~/agent";
