@@ -791,7 +791,7 @@ pub struct PayForRequestToken<'info> {
         init_if_needed,
         payer = authority,
         associated_token::mint = mint,
-        associated_token::authority = authority,
+        associated_token::authority = request_payment_counter,
     )]
     pub to_ata2: InterfaceAccount<'info, TokenAccount>,
 
