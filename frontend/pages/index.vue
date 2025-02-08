@@ -38,6 +38,19 @@
                 Send notifications to store owners in markets around you from
                 the comfort of your home
               </p>
+              <!-- TODO: remove later -->
+              <button
+                @click="
+                  async () => {
+                    const agent = new AIAgent();
+                    console.log(agent);
+                  }
+                "
+                class="tw-inline-block tw-bg-black tw-text-white tw-p-4 tw-py-2.5 tw-mt-4 tw-rounded-lg mr-4"
+              >
+                <span>TEST AGENT</span>
+                <v-icon>mdi-arrow-right</v-icon>
+              </button>
 
               <!-- should be a connect function -->
               <button
@@ -45,7 +58,7 @@
                   () => {
                     userStore.isConnected
                       ? router.push('/accounts/' + userStore.accountId)
-                      : ()=>{};
+                      : () => {};
                   }
                 "
                 class="tw-inline-block tw-bg-black tw-text-white tw-p-4 tw-py-2.5 tw-mt-4 tw-rounded-lg"
@@ -178,6 +191,7 @@
 import Tabs from "@/components/Tabs.vue";
 import { User, AccountType, STORE_KEY_MIDDLEWARE, STORE_KEY } from "@/types";
 import { useUserStore } from "@/pinia/user";
+import { AIAgent } from "~/agent";
 
 const env = useRuntimeConfig().public;
 useHead({

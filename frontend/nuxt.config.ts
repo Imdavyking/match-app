@@ -54,6 +54,7 @@ export default defineNuxtConfig({
       solMint: process.env.SOL_MINT,
       pyUsdMint: process.env.PY_USD_MINT,
       timeTillLock: process.env.TIME_TILL_LOCK,
+      serverUrl: process.env.SERVER_URL,
     },
   },
   vuetify: {

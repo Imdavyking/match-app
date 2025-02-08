@@ -114,6 +114,8 @@ export const PYTH_USDC_PRICE_FEED_PUBKEY = new PublicKey(
 
 export const PYUSD_ADDR = new PublicKey(env.pyUsdMint);
 
+export const SERVER_URL = env.serverUrl;
+
 export const PORTAL_PYUSD_TOKEN_ACCOUNT = getAssociatedTokenAddressSync(
   PYUSD_ADDR,
   PORTAL_CLIENT_PUBKEY,
@@ -122,20 +124,20 @@ export const PORTAL_PYUSD_TOKEN_ACCOUNT = getAssociatedTokenAddressSync(
 );
 
 export const tokens: {
-  name: string
-  symbol: string
-  network?: string
-  logo: string
+  name: string;
+  symbol: string;
+  network?: string;
+  logo: string;
 }[] = [
   {
-    name: 'Solana',
+    name: "Solana",
     symbol: CoinPayment.SOLANA,
-    logo: 'https://www.svgrepo.com/show/470684/solana.svg',
+    logo: "https://www.svgrepo.com/show/470684/solana.svg",
   },
   {
-    name: 'Paypal USD',
+    name: "Paypal USD",
     symbol: CoinPayment.PyUSDT,
-    network: 'solana',
-    logo: 'https://svgicons.com/api/ogimage/?id=213765&n=pyusd',
+    network: "solana",
+    logo: "https://svgicons.com/api/ogimage/?id=213765&n=pyusd",
   },
-]
+];
