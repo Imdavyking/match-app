@@ -6,7 +6,8 @@ type Data = string | Blob | ArrayBuffer;
 const tools = [
   {
     name: "createRequestAI",
-    description: "Create a new request, convert arguments to JSON.",
+    description:
+      "Create a new request with name and description, convert arguments to JSON.",
     examples: [
       {
         prompt:
