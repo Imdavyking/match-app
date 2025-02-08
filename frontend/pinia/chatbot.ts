@@ -123,9 +123,12 @@ export const useChatBot = defineStore(STORE_KEY, {
           longitude: userStore.location?.[0]!,
           latitude: userStore.location?.[1]!,
         });
+
         return `Request created`;
       } catch (error) {
         return `Failed to create request: ${error}`;
+      } finally {
+        this.addImages = false;
       }
     },
     async getRequest({ id }: { id: string }) {
